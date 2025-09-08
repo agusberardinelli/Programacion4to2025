@@ -135,13 +135,12 @@ sucursales = {"Oeste": ["Merlo", "Castelar", "Ramos Mejía"],
 # FUNCIÓN PARA BUSCAR USUARIO POR DNI
 def buscarUsuarioPorDni(nroBuscado):
     print("\nBuscando usuario...")
-    for usuario in usuarios: 
+    for usuario in usuarios:
         if nroBuscado == usuario["Dni"]:
             return usuario
         else:
             continue
-
-
+    
 # FUNCIÓN PARA CONSULTAR EL SALDO
 def consultarSaldo(usuario):
     print("\nConsultando Saldo...")
@@ -176,31 +175,49 @@ nroDni = int(input("Por favor, dame tu DNI para empezar: "))
 
 # BUSCAR USUARIO SEGÚN SU DNI Y ALMACENARLO EN UNA VARIABLE LLAMADA "usuarioActual"
 usuarioActual = buscarUsuarioPorDni(nroDni)
-
 # SALUDAR AL "usuarioActual" SEGÚN SU NOMBRE
-print(f"Bienvenido! {usuarioActual["Nombre"]}")
+print(f"¡Bienvenido! {usuarioActual["Nombre"]}")
 
 # BUCLE DEL CHATBOT - PERMITIR ELEGIR OPCIONES HASTA QUE DESEE TERMINAR
 
 continuar = "SI"
 while continuar == "SI":
     opcion = input("""
-Ingrese el número de opción que desea:
+    Ingrese el número de opción que desea:
 
-1. Consultar saldo
-2. Consultar facturas de servicios vencidas
-3. Pagar facturas
-4. Consultar sucursales
-5. Solicitar un turno
->>>>>>>>>>>>: """)
+    1. Consultar saldo
+    2. Consultar facturas de servicios vencidas
+    3. Pagar facturas
+    4. Consultar sucursales
+    5. Solicitar un turno
+    >>>>>>>>>>>>: """)
+    if opcion == "1":
+        print("Su saldo es: ")
+        print(consultarSaldo(usuarioActual))
+    elif opcion == "2":
+        print("Sus facturas vencidas son: ")
+        consultarFacturas(usuarioActual)
+    elif opcion == "3":
+        pagarFacturas(usuarioActual)
+    elif opcion == "4":
+        consultarSucursales()
+    elif opcion == "5":
+        sacarTurno()
+    else:
+        print("La opcion ingresada no es valida")
+    
+    continuar = input("Desea continuar? Escriba SI o NO")
+    # VERIFICAR QUE LA OPCIÓN INGRESADA SEA CORRECTA
+    if continuar == "SI":
+        continue
+    else:
+        continuar = "NO"
+        break
+    # USAR UN CONDICIONAL PARA EJECUTAR LA FUNCIÓN QUE CORRESPONDA SEGÚN LA ELECCIÓN
 
-# VERIFICAR QUE LA OPCIÓN INGRESADA SEA CORRECTA
-
-# USAR UN CONDICIONAL PARA EJECUTAR LA FUNCIÓN QUE CORRESPONDA SEGÚN LA ELECCIÓN
-
-# PREGUNTAR SI DESEA CONTINUAR
-continuar = "NO"
+    # PREGUNTAR SI DESEA CONTINUAR
+    
 
 
-# CUANDO TERMINA EL BUCLE, SE MUESTRA UN MENSAJE DE DESPEDIDA
-print("\n**¡Gracias por utilizar el servicio de autogestión!**")
+    # CUANDO TERMINA EL BUCLE, SE MUESTRA UN MENSAJE DE DESPEDIDA
+    print("\n**¡Gracias por utilizar el servicio de autogestión!**")
