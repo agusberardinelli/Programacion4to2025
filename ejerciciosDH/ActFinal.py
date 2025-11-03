@@ -144,16 +144,47 @@ def buscarUsuarioPorDni(nroBuscado):
 # FUNCIÓN PARA CONSULTAR EL SALDO
 def consultarSaldo(usuario):
     print("\nConsultando Saldo...")
+    return usuario["Saldo"]
+
 
 # FUNCIÓN PARA CONSULTAR FACTURAS
 def consultarFacturas(usuario):
     print("\nConsultando Facturas...")
+    return usuario["FacturasAdeudadas"]
 
 # FUNCIÓN PARA PAGAR FACTURAS
 def pagarFacturas(usuario):
     print("\nPagando Facturas...")
-# LAS FACTURAS SOLO SE PAGAN SI TIENES SALDO SUFICIENTE
-# SI LAS FACTURAS SE PAGAN, SE BORRAN DEL DICCIONARIO
+    # LAS FACTURAS SOLO SE PAGAN SI TIENES SALDO SUFICIENTE
+    # SI LAS FACTURAS SE PAGAN, SE BORRAN DEL DICCIONARIO
+    print("Sus facturas vencidas son: ")
+    facturas = consultarFacturas(usuario)
+    cont = 0
+    for factura in facturas:
+        print(f"{cont}. {factura["Servicio"]} con vencimiento {factura["Vencimiento"]} con valor: {factura["Valor"]}")
+        cont += 1
+    dato = int(input("Selecciona la factura que queres abonar o marca 9, para finalizar"))
+    while dato != 9:
+        cantFacturas = len(facturas)
+        if dato > cantFacturas or dato < 0:
+            print("Disculpe, la opcion ingresada no es valida, por favor, seleccione correctamente")
+            cont = 1
+            for factura in facturas:
+                print(f"{cont}. {factura["Servicio"]} con vencimiento {factura["Vencimiento"]} con valor: {factura["Valor"]}")
+                cont += 1
+            dato = int(input("Selecciona la factura que queres abonar o marca 0, para finalizar"))
+        else:
+            if consultarSaldo(usuario) < facturas[dato]["Valor"]:
+                print("Usted no posee saldo suficiente para realizar el pago")
+                break
+            else:
+                saldoActual = consultarSaldo(usuario) - facturas[dato]["Valor"]
+                # erase element facturas[dato] from fracturas
+                
+                
+                usuario['Saldo'] = saldoActual
+
+
 
 # FUNCIÓN PARA CONSULTAR SUCURSALES
 def consultarSucursales():
@@ -192,13 +223,19 @@ while continuar == "SI":
     5. Solicitar un turno
     >>>>>>>>>>>>: """)
     if opcion == "1":
-        print("Su saldo es: ")
-        print(consultarSaldo(usuarioActual))
+        print("Su saldo es: ",consultarSaldo(usuarioActual))
     elif opcion == "2":
         print("Sus facturas vencidas son: ")
-        consultarFacturas(usuarioActual)
+        facturas = consultarFacturas(usuarioActual)
+        cont = 1
+        for factura in facturas:
+            print(f"{cont}. {factura["Servicio"]} con vencimiento {factura["Vencimiento"]} con valor: {factura["Valor"]}")
+            cont += 1
+
+        
     elif opcion == "3":
         pagarFacturas(usuarioActual)
+
     elif opcion == "4":
         consultarSucursales()
     elif opcion == "5":
